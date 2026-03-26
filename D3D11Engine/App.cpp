@@ -1,7 +1,6 @@
 #include "App.h"
 
-App::App()
-	:wnd(800, 600, L"My app")
+App::App() : wnd(std::make_unique<Window>(800, 600, L"D3D11Engine"))
 {
 }
 
@@ -22,5 +21,5 @@ int App::Go()
 
 void App::DoFrame()
 {
-	wnd.Gfx().EndFrame();
+	wnd->Gfx().EndFrame();
 }

@@ -2,6 +2,7 @@
 #include "motherfucker_headers.h"
 #include <d3d11.h>
 
+#define safe_release(a)	{	if(a){(a)->Release(); (a)=nullptr;}	}
 
 class Graphics {
 public:

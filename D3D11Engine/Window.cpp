@@ -85,16 +85,12 @@ Window::Window(int width, int height, const WCHAR* name) noexcept
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	//Create graphics object
 	pGfx = std::make_unique<Graphics>(hWnd);
+	kbd = std::make_unique<Keyboard>();
 }
 
 Window::~Window()
 {
 	DestroyWindow(hWnd);
-}
-
-Graphics& Window::Gfx()
-{
-	return *pGfx;
 }
 
 LRESULT WINAPI Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept {
@@ -123,7 +119,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		PostQuitMessage(0);
 		return 0;
 	case WM_CHAR:
-		kbd.OnChar(static_cast<char>(wParam));
+		kbd->OnChar(static_cast<char>(wParam));
 		break;
 	};
 

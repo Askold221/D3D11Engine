@@ -28,13 +28,19 @@ public:
 	Window& operator = (const Window&) = delete;
 	void SetTitle(const std::string& title);
 	static std::optional<int> ProcessMessages() noexcept;
-	Graphics& Gfx();
+	Graphics& Gfx() { return *pGfx; };
+
+	int GetWindowWidth() const { return width; }
+	int GetWindowHeight() const { return height; }
+
+	inline void SetWindowWidth(int w) { width = w; }
+	inline void SetWindowHeight(int h) { height = h; }
+
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
-	Keyboard kbd;
-	Graphics gfx;
+	std::unique_ptr<Keyboard> kbd;
 private:
 	int width;
 	int height;

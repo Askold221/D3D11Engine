@@ -4,7 +4,8 @@
 
 Graphics::Graphics(HWND hWnd)
 {
-	DXGI_SWAP_CHAIN_DESC sd = {};
+	DXGI_SWAP_CHAIN_DESC sd;
+	ZeroMemory(&sd, sizeof(sd));
 	sd.BufferDesc.Width = 0;
 	sd.BufferDesc.Height = 0;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -39,18 +40,9 @@ Graphics::Graphics(HWND hWnd)
 
 Graphics::~Graphics()
 {
-	if (pDevice != nullptr)
-	{
-		pDevice->Release();
-	}
-	if (pContext != nullptr)
-	{
-		pContext->Release();
-	}
-	if (pSwap != nullptr)
-	{
-		pSwap->Release();
-	}
+	safe_release(pDevice);
+	safe_release(pContext);
+	safe_release(pSwap);
 }
 
 void Graphics::EndFrame()

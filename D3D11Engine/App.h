@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.h"
+#include <memory>
 
 class App
 {
@@ -9,5 +10,5 @@ public:
 private:
 	void DoFrame();
 private:
-	Window wnd;
+	std::unique_ptr<Window> wnd;
 };
