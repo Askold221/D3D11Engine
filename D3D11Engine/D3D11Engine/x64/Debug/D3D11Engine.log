@@ -1,0 +1,9 @@
+﻿  App.cpp
+  Graphics.cpp
+  WinMain.cpp
+  Window.cpp
+  Создание кода...
+C:\Projects\D3D11Engine\Window.cpp(110,1): warning C4715: Window::HandleMsgSetup: значение возвращается не при всех путях выполнения
+  D3D11Engine.vcxproj -> C:\Projects\D3D11Engine\x64\Debug\D3D11Engine.exe
+  "pwsh.exe" не является внутренней или внешней
+  командой, исполняемой программой или пакетным файлом.
