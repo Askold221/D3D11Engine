@@ -17,6 +17,7 @@ public:
 		const float color[] = { red, green, blue, 1.0f };
 		pContext->ClearRenderTargetView(pTarget, color);
 	}
+	void DrawTestTriangle();
 private:
 	ID3D11Device* pDevice = nullptr;
 	IDXGISwapChain* pSwap = nullptr;
