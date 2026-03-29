@@ -4,6 +4,8 @@
 #include <string>
 #include "Graphics.h"
 #include <memory>
+#include <chrono>
+#include <iostream>
 
 class Window {
 private:

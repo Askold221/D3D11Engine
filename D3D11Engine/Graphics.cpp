@@ -2,9 +2,14 @@
 #include <d3dcompiler.h>
 #include <iterator>
 #include <memory>
+#include <cmath>
+#include <iostream>
+#include <DirectXMath.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
+
+namespace dx = DirectX;
 
 Graphics::Graphics(HWND hWnd)
 {
@@ -59,7 +64,7 @@ Graphics::~Graphics()
 	safe_release(pSwap);
 }
 
-void Graphics::DrawTestTriangle()
+void Graphics::DrawTestTriangle(float angle)
 {
 	HRESULT hr;
 	struct Vertex
@@ -121,6 +126,36 @@ void Graphics::DrawTestTriangle()
 
 	//bind index buffer
 	pContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R16_UINT, 0u);
+
+	// create constant buffer
+	struct ConstantBuffer {
+		dx::XMMATRIX transform;
+
+	};
+	const ConstantBuffer cb =
+	{
+		{
+			dx::XMMatrixTranspose(
+				dx::XMMatrixRotationZ(angle)*
+				dx::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f)
+			)
+		}
+	};
+
+	ID3D11Buffer* pConstantBuffer;
+	D3D11_BUFFER_DESC cbd;
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER; 
+	cbd.Usage = D3D11_USAGE_DYNAMIC;
+	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbd.MiscFlags = 0u;
+	cbd.ByteWidth = sizeof(cb);
+	cbd.StructureByteStride = 0u;
+	D3D11_SUBRESOURCE_DATA csd = {};
+	csd.pSysMem = &cb;
+	pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer);
+
+	// bind constant buffer to vertex shader
+	pContext->VSSetConstantBuffers(0u, 1u, &pConstantBuffer);
 
 	//Create Pixel Shader
 	ID3D11PixelShader* pPixelShader = nullptr;
