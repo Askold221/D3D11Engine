@@ -64,26 +64,35 @@ Graphics::~Graphics()
 	safe_release(pSwap);
 }
 
-void Graphics::DrawTestTriangle(float angle)
+void Graphics::DrawTestTriangle(float angle, float x, float y)
 {
 	HRESULT hr;
 	struct Vertex
 	{
-		float x;
-		float y;
-		unsigned char r;
-		unsigned char g;
-		unsigned char b;
-		unsigned char a;
+		struct
+		{
+			float x;
+			float y;
+			float z;
+		} pos;
+		struct
+		{
+			unsigned char r;
+			unsigned char g;
+			unsigned char b;
+		} color;
 	};
+
 	const Vertex vertices[] =
 	{
-		{0.0f, 0.5f, 255, 0, 0, 0},
-		{0.5f, -0.5f, 0, 255, 0, 0},
-		{-0.5f, -0.5f, 0, 0, 255, 0}, 
-		{-0.3f, 0.3f, 0.0f, 255, 0, 0},
-		{0.3f, 0.3f, 0, 0, 255, 0},
-		{0.0f, -0.8f, 255, 0, 0, 0}
+		{-1.0f, -1.0f, -1.0f, 255, 0, 0}, 
+		{1.0f, -1.0f, -1.0f, 0, 255, 0},
+		{-1.0f, 1.0f, -1.0f, 0, 0, 255},
+		{1.0f, 1.0f, -1.0f, 255, 255, 0},
+		{-1.0f, -1.0f, 1.0f, 255, 0, 255},
+		{1.0f, -1.0f, 1.0f, 0, 255, 255},
+		{-1.0f, 1.0f, 1.0f, 0, 0, 0},
+		{1.0f, 1.0f, 1.0f, 255,255, 255}
 	};
 	ID3DBlob* pBlob = nullptr; 
 
@@ -106,10 +115,12 @@ void Graphics::DrawTestTriangle(float angle)
 	//create index buffer
 	const unsigned short indices[] =
 	{
-		0,1,2,
-		0,2,3,
-		0,4,1,
-		2,1,5
+		0,2,1,2,3,1,
+		1,3,5,3,7,5,
+		2,6,3,3,6,7,
+		4,5,7,4,7,6,
+		0,4,2,2,4,6,
+		0,1,4,1,5,4
 	};
 	ID3D11Buffer* pIndexBuffer;
 	D3D11_BUFFER_DESC ibd = {};
@@ -137,7 +148,9 @@ void Graphics::DrawTestTriangle(float angle)
 		{
 			dx::XMMatrixTranspose(
 				dx::XMMatrixRotationZ(angle)*
-				dx::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f)
+				dx::XMMatrixRotationX(angle)*
+				dx::XMMatrixTranslation(x, y, 4.0f) *
+				dx::XMMatrixPerspectiveFovLH( 1.0f, 3.0f / 4.0f, 0.5f, 10.0f) 
 			)
 		}
 	};
@@ -180,8 +193,8 @@ void Graphics::DrawTestTriangle(float angle)
 	ID3D11InputLayout* pInputLayout = nullptr; 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
-		{"Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{ "Color", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 8, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{ "Color", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 12u, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 	pDevice->CreateInputLayout(
 		ied, (UINT)std::size(ied),
