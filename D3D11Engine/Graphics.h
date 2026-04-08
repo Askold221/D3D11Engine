@@ -16,6 +16,7 @@ public:
 	{
 		const float color[] = { red, green, blue, 1.0f };
 		pContext->ClearRenderTargetView(pTarget, color);
+		pContext->ClearDepthStencilView(pDSV, D3D11_CLEAR_DEPTH, 1.0f, 0u); 
 	}
 	void DrawTestTriangle(float angle, float x, float y);
 private:
@@ -23,4 +24,5 @@ private:
 	IDXGISwapChain* pSwap = nullptr;
 	ID3D11DeviceContext* pContext = nullptr;
 	ID3D11RenderTargetView* pTarget = nullptr;
+	ID3D11DepthStencilView* pDSV = nullptr;
 };
