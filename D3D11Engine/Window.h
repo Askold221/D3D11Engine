@@ -6,6 +6,7 @@
 #include <memory>
 #include <chrono>
 #include <iostream>
+#include "Camera.h"
 
 class Window {
 private:
@@ -48,4 +49,5 @@ private:
 	int height;
 	HWND hWnd;
 	std::unique_ptr<Graphics> pGfx;
+	std::unique_ptr<Camera> m_Camera;
 };

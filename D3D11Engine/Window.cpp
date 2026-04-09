@@ -86,6 +86,7 @@ Window::Window(int width, int height, const WCHAR* name) noexcept
 	//Create graphics object
 	pGfx = std::make_unique<Graphics>(hWnd);
 	kbd = std::make_unique<Keyboard>();
+	m_Camera = std::make_unique<Camera>(width, height);
 }
 
 Window::~Window()

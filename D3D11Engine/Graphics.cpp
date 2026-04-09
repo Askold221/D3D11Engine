@@ -173,17 +173,18 @@ void Graphics::DrawTestTriangle(float angle, float x, float y)
 		dx::XMMATRIX transform;
 
 	};
+	
 	const ConstantBuffer cb =
 	{
 		{
 			dx::XMMatrixTranspose(
-				dx::XMMatrixRotationZ(angle)*
-				dx::XMMatrixRotationX(angle)*
+				dx::XMMatrixRotationX(angle) * 
 				dx::XMMatrixTranslation(x, y, 4.0f) *
 				dx::XMMatrixPerspectiveFovLH( 1.0f, 3.0f / 4.0f, 0.5f, 10.0f) 
 			)
 		}
 	};
+	
 
 	ID3D11Buffer* pConstantBuffer;
 	D3D11_BUFFER_DESC cbd;
@@ -199,7 +200,7 @@ void Graphics::DrawTestTriangle(float angle, float x, float y)
 
 	// bind constant buffer to vertex shader
 	pContext->VSSetConstantBuffers(0u, 1u, &pConstantBuffer);
-
+	
 	struct ConstantBuffer2
 	{
 		struct
